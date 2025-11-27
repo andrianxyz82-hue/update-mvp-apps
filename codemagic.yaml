@@ -1,0 +1,36 @@
+workflows:
+  android-workflow:
+    name: Android Release Build
+    max_build_duration: 120
+    environment:
+      flutter: stable
+      java: 17
+    
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+          
+      - name: Flutter Clean
+        script: |
+          flutter clean
+          
+      - name: Build APK
+        script: |
+          flutter build apk --release --no-codesign
+          
+      - name: Build App Bundle
+        script: |
+          flutter build appbundle --release --no-codesign
+          
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/bundle/release/app-release.aab
+      
+    publishing:
+      email:
+        recipients:
+          - admin@example.com # Ganti dengan email Anda
+        notify:
+          success: true
+          failure: true
